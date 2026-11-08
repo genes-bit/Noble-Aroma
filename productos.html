@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos | Noble Aroma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="../img/logo/logo-cafe.png" type="image/png" />
+</head>
+
+<body>
+ 
+<div id="header-placeholder"></div>
+  <main class="pagina-productos">
+    <section class="titulo-catalogo animar-scroll">
+      <img src="../img/Momento-de-cafe-y-dulces.png" alt="Momento de café y dulces" class="titulo-imagen" />
+    </section>
+
+    <section id="destacados" class="catalogo animar-scroll" style="padding-bottom: 0;">
+      <div class="catalogo-encabezado">
+        <div>
+          <h2>Productos Destacados</h2>
+          <p>Los favoritos de nuestros clientes.</p>
+        </div>
+      </div>
+      <div class="carrusel-destacados" id="listaDestacados"></div>
+    </section>
+
+    <section class="catalogo animar-scroll">
+      <div class="catalogo-encabezado">
+        <div>
+          <h2>Explora nuestro catálogo</h2>
+          <p id="contadorProductos">Productos disponibles</p>
+        </div>
+        <div class="ordenar-productos">
+          <label for="orden">Ordenar por:</label>
+          <select id="orden">
+            <option value="destacados">Destacados</option>
+            <option value="menor">Precio: menor a mayor</option>
+            <option value="mayor">Precio: mayor a menor</option>
+            <option value="nombre">Nombre: A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="catalogo-contenido">
+        <button class="btn-abrir-filtros" id="btn-abrir-filtros">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" /></svg>
+          Filtros
+        </button>
+
+        <aside class="panel-filtros" id="panel-filtros">
+          <div class="filtros-encabezado">
+            <h3>Filtros</h3>
+            <button type="button" id="cerrar-filtros" class="cerrar-panel">&times;</button>
+            <button type="button" id="limpiarFiltros">Limpiar</button>
+          </div>
+          <div class="filtro">
+            <label for="buscarProducto">Buscar producto</label>
+            <input type="search" id="buscarProducto" placeholder="Ej. Chocolate..." />
+          </div>
+          <div class="filtro">
+            <h4>Categorías</h4>
+            <label class="opcion-filtro"><input type="radio" name="categoria" value="Todas" checked /> Todos los productos</label>
+            <label class="opcion-filtro"><input type="radio" name="categoria" value="reposteria" /> Postres</label>
+            <label class="opcion-filtro"><input type="radio" name="categoria" value="pan" /> Panes</label>
+            <label class="opcion-filtro"><input type="radio" name="categoria" value="aromaticas" /> Bebidas aromáticas</label>
+            <label class="opcion-filtro"><input type="radio" name="categoria" value="cafe" /> Café</label>
+            <label class="opcion-filtro"><input type="radio" name="categoria" value="bebidas" /> Bebidas frías</label>
+          </div>
+          <div class="filtro">
+            <label for="precioMaximo">Precio máximo</label>
+            <input type="range" id="precioMaximo" min="800" max="13800" step="1000" value="13800" />
+            <p id="valorPrecio">$13.800</p>
+          </div>
+          <button type="button" id="limpiarFiltros-mobile" class="boton-confirmar" style="margin-top: 15px; display: none;">Aplicar / Limpiar</button>
+        </aside>
+
+        <div class="zona-productos">
+          <div class="espacio_productos" id="listaProductos"></div>
+          <div class="sin-productos" id="sinProductos" hidden>
+            <h3>No encontramos este producto</h3>
+            <p>Intenta cambiar los filtros de búsqueda</p>
+            <button type="button" id="verTodos">Ver todos los productos</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay-filtros" id="overlay-filtros"></div>
+
+  
+  <div id="modal-pedido" class="modal-overlay">
+    <div class="modal-contenido">
+      <button class="modal-cerrar" id="cerrar-modal">&times;</button>
+      <div class="modal-producto-header">
+        <img id="modal-img" src="" alt="Producto">
+        <div>
+          <h3 id="modal-nombre"></h3>
+          <p id="modal-precio" class="modal-precio"></p>
+        </div>
+      </div>
+      <form id="form-pedido" class="modal-formulario">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" min="1" value="1" required>
+        <label>¿Cómo lo prefieres? (Puedes elegir varias)</label>
+        <div class="opciones-pedido">
+          <label class="opcion-radio"><input type="checkbox" name="preferencia" value="Normal"> Normal</label>
+          <label class="opcion-radio"><input type="checkbox" name="preferencia" value="Sin azúcar"> Sin azúcar</label>
+          <label class="opcion-radio"><input type="checkbox" name="preferencia" value="Para llevar"> Para llevar</label>
+          <label class="opcion-radio"><input type="checkbox" name="preferencia" value="Sin hielo"> Sin hielo</label>
+          <label class="opcion-radio"><input type="checkbox" name="preferencia" value="Con hielo"> Con hielo</label>
+        </div>
+        <label for="instrucciones">Instrucciones adicionales:</label>
+        <textarea id="instrucciones" placeholder="Escribe aquí tus instrucciones..."></textarea>
+        <button type="submit" class="boton-confirmar">Confirmar Pedido</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast-notificacion">
+    <p id="toast-mensaje">¡Producto agregado!</p>
+  </div>
+
+  <!-- FOOTER DIRECTO -->
+  <footer>
+    <div class="columna-izquierda">
+        <a href="index.html" class="logo-container" style="margin-left: 0;">
+            <img src="../img/logo/Logo-de-Cafeteria-Noble-Aroma.png" alt="Noble Aroma Logo" class="footer-logo" />
+        </a>
+        <div class="social-icons-footer">
+            <a href="https://www.instagram.com/cafeteria_noblearoma" target="_blank" rel="noopener noreferrer" title="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" /></svg>
+            </a>
+            <a href="https://wa.me/573117124076" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" /></svg>
+            </a>
+            <a href="https://www.tiktok.com/@noble_aroma" target="_blank" rel="noopener noreferrer" title="TikTok">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z" /></svg>
+            </a>
+        </div>
+        <div style="color: #F7F2E8; font-size: 17px; line-height: 1.6; margin-top: 15px;">
+            <p style="margin: 0 0 5px 0;"><strong>Horarios de Atención:</strong></p>
+            <p style="margin: 0;">Lunes a Viernes: 8:00 am - 5:00 pm</p>
+            <p style="margin: 0;">Fines de semana: 9:30 am - 7:00 pm</p>
+        </div>
+    </div>
+    <div class="linea-separadora"></div>
+    <div class="footer-columnas animar-scroll">
+        <div class="footer-col">
+            <h3>Tienda</h3>
+            <a href="productos.html">Ver Todos Los Productos</a>
+            <a href="descuentos.html">Promociones</a>
+            <a href="productos.html#destacados">Productos Destacados</a>
+        </div>
+        <div class="footer-col">
+            <h3>Síguenos</h3>
+            <a href="https://www.instagram.com/cafeteria_noblearoma" target="_blank" rel="noopener noreferrer" class="red-social">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" /></svg>
+                Instagram
+            </a>
+            <a href="https://wa.me/573117124076" target="_blank" rel="noopener noreferrer" class="red-social">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" /></svg>
+                WhatsApp
+            </a>
+        </div>
+        <div class="footer-col">
+            <h3>Nosotros</h3>
+            <a href="conocenos.html">Nuestra Historia</a>
+        </div>
+    </div>
+    <div class="footer-bootom">
+        <p>&copy; 2026 Noble Aroma. Todos los derechos reservados.</p>
+        <div class="metodos-pago">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" class="payment-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" class="payment-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/1200px-American_Express_logo.svg.png" alt="Amex" class="payment-icon">
+        </div>
+    </div>
+  </footer>
+
+  <div id="overlay-carrito" class="overlay-carrito"></div>
+  <aside id="panel-carrito" class="panel-carrito">
+    <div class="panel-header">
+      <h2>Tu Carrito</h2>
+      <button class="cerrar-panel" id="cerrar-panel">&times;</button>
+    </div>
+    <div class="panel-body">
+      <div id="lista-carrito" class="lista-carrito"></div>
+      <div id="carrito-vacio" class="carrito-vacio" hidden>
+        <p>Tu carrito está vacío.</p>
+        <a href="productos.html" class="boton-leer-mas">Ver Productos</a>
+      </div>
+    </div>
+    <div class="panel-footer" id="resumen-carrito" hidden>
+      <div class="linea-resumen"><span>Subtotal</span><span id="subtotal">$0</span></div>
+      <div class="linea-resumen"><span>Envío</span><span>Gratis</span></div>
+      <div class="linea-resumen total"><span>Total</span><span id="total-final">$0</span></div>
+      <button id="btn-pagar" class="boton-confirmar">Proceder al Pago</button>
+      <button id="btn-vaciar" class="boton-vaciar">Vaciar carrito</button>
+    </div>
+  </aside>
+  
+  <div id="modal-checkout" class="modal-overlay">
+    <div class="modal-contenido">
+      <button class="modal-cerrar" id="cerrar-checkout">&times;</button>
+      <h2 style="font-family: 'Playfair Display', serif; color: #173D2D; margin-top: 0;">Finalizar Compra</h2>
+      <form id="form-checkout" class="modal-formulario">
+        <label>Nombre completo</label>
+        <input type="text" id="checkout-nombre" placeholder="Tu nombre" required>
+        <label>Dirección de entrega</label>
+        <input type="text" id="checkout-direccion" placeholder="Ej. Cra 24 #18-11" required>
+        <label>Teléfono de contacto</label>
+        <input type="tel" id="checkout-telefono" placeholder="Ej. 300 123 4567" required>
+        <label>Método de Pago</label>
+        <div class="opciones-pedido">
+          <label class="opcion-radio"><input type="radio" name="metodo-pago" value="Tarjeta de Crédito/Débito" checked> Tarjeta de Crédito/Débito</label>
+          <label class="opcion-radio"><input type="radio" name="metodo-pago" value="Pago en Efectivo"> Pago en Efectivo (Contra entrega)</label>
+          <label class="opcion-radio"><input type="radio" name="metodo-pago" value="Transferencia Bancaria"> Transferencia Bancaria</label>
+        </div>
+        <button type="submit" class="boton-confirmar">Confirmar y Pagar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/principal.js" defer></script>
+  <script src="../js/carrito.js" defer></script>
+  <script src="../js/productos.js" defer></script>
+</body>
+</html>
